@@ -208,17 +208,19 @@ DATABASES = {
 
 # Configuración del superusuario predeterminado
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
-ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@gmail.com')
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin')
-
-from django.contrib.auth.models import User
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
 
 # Creación del superusuario si no existe
 if 'runserver' not in sys.argv and 'migrate' not in sys.argv:
     try:
+        from django.contrib.auth.models import User
         User.objects.get(username=ADMIN_USERNAME)
     except User.DoesNotExist:
-        User.objects.create_superuser(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD)
+        pass
+    else:
+        from django.core.management import call_command
+        call_command('createsuperuser', '--noinput', username=ADMIN_USERNAME, email=ADMIN_EMAIL)
 
 # DATABASES = {
 #     "default": {
