@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -198,12 +199,26 @@ WSGI_APPLICATION = 'circulo_academico.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Configuración de la base de datos
 DATABASES = {
     'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600
+        default=os.getenv('DATABASE_URL')
     )
 }
+
+# Configuración del superusuario predeterminado
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@gmail.com')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin')
+
+from django.contrib.auth.models import User
+
+# Creación del superusuario si no existe
+if 'runserver' not in sys.argv and 'migrate' not in sys.argv:
+    try:
+        User.objects.get(username=ADMIN_USERNAME)
+    except User.DoesNotExist:
+        User.objects.create_superuser(ADMIN_USERNAME, ADMIN_EMAIL, ADMIN_PASSWORD)
 
 # DATABASES = {
 #     "default": {
