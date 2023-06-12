@@ -245,9 +245,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'core/static')
 ]
 
-STATICFILES_EXCLUDE = [
-    'vendor/bootswatch/default/bootstrap.min.css.map',
-]
+# STATICFILES_EXCLUDE = [
+#     'vendor/bootswatch/default/bootstrap.min.css.map',
+# ]
 
 
 if not DEBUG:
