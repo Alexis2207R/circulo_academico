@@ -14,6 +14,27 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
+from django.core.management import call_command
+from django.contrib.auth import get_user_model
+
+# Configuración del superusuario predeterminado
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
+
+
+# Creación del superusuario si no existe
+if 'runserver' not in sys.argv and 'migrate' not in sys.argv:
+    try:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        User.objects.get(username=ADMIN_USERNAME)
+    except User.DoesNotExist:
+        pass
+    else:
+        from django.core.management import call_command
+        call_command('createsuperuser', '--noinput', username=ADMIN_USERNAME, email=ADMIN_EMAIL)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -205,22 +226,6 @@ DATABASES = {
         default=os.getenv('DATABASE_URL')
     )
 }
-
-# Configuración del superusuario predeterminado
-ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
-ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', 'admin@example.com')
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin_password')
-
-# Creación del superusuario si no existe
-if 'runserver' not in sys.argv and 'migrate' not in sys.argv:
-    try:
-        from django.contrib.auth.models import User
-        User.objects.get(username=ADMIN_USERNAME)
-    except User.DoesNotExist:
-        pass
-    else:
-        from django.core.management import call_command
-        call_command('createsuperuser', '--noinput', username=ADMIN_USERNAME, email=ADMIN_EMAIL)
 
 # DATABASES = {
 #     "default": {
