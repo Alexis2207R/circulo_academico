@@ -1,16 +1,17 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from django.contrib.auth.views import PasswordChangeView, LogoutView
 
 urlpatterns = [
-    # Apps core
-    path("", include("core.urls")),
-    # App Admin
-    path("admin/", admin.site.urls),
+    # Otras rutas...
+    # ...
+    # Ruta para el cambio de contraseña
     path(
         "admin/password_change/",
         PasswordChangeView.as_view(),
         name="admin_password_change",
     ),
+    # Ruta para el cierre de sesión
     path("admin/logout/", LogoutView.as_view(), name="admin_logout"),
+    # Otras rutas...
+    # ...
 ]
