@@ -47,7 +47,7 @@ class Docente(models.Model):
     apellido = models.CharField(verbose_name="Apellido", max_length=10)
     fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento", auto_now=False, auto_now_add=False)
     sexo = models.CharField(verbose_name="Sexo", max_length=1, choices=SEXO)
-    direccion_residencia = models.CharField(verbose_name="Dirección", max_length=50)
+    direccion_residencia = models.CharField(verbose_name="Dirección", max_length=50, null=True)
     telefono = models.CharField(verbose_name="Numero celular", max_length=20)
     correo = models.CharField(verbose_name="Correo", max_length=50)
 
